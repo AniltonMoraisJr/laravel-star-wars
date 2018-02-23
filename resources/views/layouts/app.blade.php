@@ -12,10 +12,15 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
     <style>
         .body-custom {
-            background-image: url('images/fundo_star_wars.png'); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center center;
+            background-image: url("{{ asset('images/fundo_star_wars.png') }}"); 
+            background-repeat: no-repeat; 
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center center;
         }
     </style>
 </head>
@@ -34,9 +39,7 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
-                    </a>
+                    <router-link :to="{ name: 'home' }" class="navbar-brand">Laravel Star Wars</router-link>
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
