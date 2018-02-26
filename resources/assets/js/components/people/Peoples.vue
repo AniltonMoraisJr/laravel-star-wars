@@ -26,8 +26,8 @@
                 </table>
                 <nav aria-label="...">
                     <ul class="pager">
-                        <li class="previous"><a v-on:click="getPeople(pagination_previous)" v-if="pagination_previous != null"><span aria-hidden="true">&larr;</span> Previous</a></li>
-                        <li class="next"><a v-on:click="getPeople(pagination_next)" v-if="pagination_next != null" >Next <span aria-hidden="true">&rarr;</span></a></li>
+                        <li class="previous"><a v-on:click="getPeoples(pagination_previous)" v-if="pagination_previous != null"><span aria-hidden="true">&larr;</span> Previous</a></li>
+                        <li class="next"><a v-on:click="getPeoples(pagination_next)" v-if="pagination_next != null" >Next <span aria-hidden="true">&rarr;</span></a></li>
                     </ul>
                 </nav>
             </div>
@@ -46,10 +46,10 @@
             }
         },
         mounted() {
-            this.getPeople('');
+            this.getPeoples('');
         },
         methods: {
-            getPeople(url){
+            getPeoples(url){
                 let sUrl = url != '' ? url : 'https://swapi.co/api/people';
                 this.axios.get(sUrl)
                     .then((response) => {
