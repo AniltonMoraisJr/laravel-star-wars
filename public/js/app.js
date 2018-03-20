@@ -377,133 +377,6 @@ module.exports = {
 /* 1 */
 /***/ (function(module, exports) {
 
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-var utils = __webpack_require__(0);
-var normalizeHeaderName = __webpack_require__(21);
-
-var DEFAULT_CONTENT_TYPE = {
-  'Content-Type': 'application/x-www-form-urlencoded'
-};
-
-function setContentTypeIfUnset(headers, value) {
-  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
-    headers['Content-Type'] = value;
-  }
-}
-
-function getDefaultAdapter() {
-  var adapter;
-  if (typeof XMLHttpRequest !== 'undefined') {
-    // For browsers use XHR adapter
-    adapter = __webpack_require__(7);
-  } else if (typeof process !== 'undefined') {
-    // For node use HTTP adapter
-    adapter = __webpack_require__(7);
-  }
-  return adapter;
-}
-
-var defaults = {
-  adapter: getDefaultAdapter(),
-
-  transformRequest: [function transformRequest(data, headers) {
-    normalizeHeaderName(headers, 'Content-Type');
-    if (utils.isFormData(data) ||
-      utils.isArrayBuffer(data) ||
-      utils.isBuffer(data) ||
-      utils.isStream(data) ||
-      utils.isFile(data) ||
-      utils.isBlob(data)
-    ) {
-      return data;
-    }
-    if (utils.isArrayBufferView(data)) {
-      return data.buffer;
-    }
-    if (utils.isURLSearchParams(data)) {
-      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
-      return data.toString();
-    }
-    if (utils.isObject(data)) {
-      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
-      return JSON.stringify(data);
-    }
-    return data;
-  }],
-
-  transformResponse: [function transformResponse(data) {
-    /*eslint no-param-reassign:0*/
-    if (typeof data === 'string') {
-      try {
-        data = JSON.parse(data);
-      } catch (e) { /* Ignore */ }
-    }
-    return data;
-  }],
-
-  timeout: 0,
-
-  xsrfCookieName: 'XSRF-TOKEN',
-  xsrfHeaderName: 'X-XSRF-TOKEN',
-
-  maxContentLength: -1,
-
-  validateStatus: function validateStatus(status) {
-    return status >= 200 && status < 300;
-  }
-};
-
-defaults.headers = {
-  common: {
-    'Accept': 'application/json, text/plain, */*'
-  }
-};
-
-utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
-  defaults.headers[method] = {};
-});
-
-utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
-  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
-});
-
-module.exports = defaults;
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
 /* globals __VUE_SSR_CONTEXT__ */
 
 // IMPORTANT: Do NOT use ES2015 features in this file.
@@ -608,6 +481,133 @@ module.exports = function normalizeComponent (
   }
 }
 
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+var utils = __webpack_require__(0);
+var normalizeHeaderName = __webpack_require__(21);
+
+var DEFAULT_CONTENT_TYPE = {
+  'Content-Type': 'application/x-www-form-urlencoded'
+};
+
+function setContentTypeIfUnset(headers, value) {
+  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
+    headers['Content-Type'] = value;
+  }
+}
+
+function getDefaultAdapter() {
+  var adapter;
+  if (typeof XMLHttpRequest !== 'undefined') {
+    // For browsers use XHR adapter
+    adapter = __webpack_require__(7);
+  } else if (typeof process !== 'undefined') {
+    // For node use HTTP adapter
+    adapter = __webpack_require__(7);
+  }
+  return adapter;
+}
+
+var defaults = {
+  adapter: getDefaultAdapter(),
+
+  transformRequest: [function transformRequest(data, headers) {
+    normalizeHeaderName(headers, 'Content-Type');
+    if (utils.isFormData(data) ||
+      utils.isArrayBuffer(data) ||
+      utils.isBuffer(data) ||
+      utils.isStream(data) ||
+      utils.isFile(data) ||
+      utils.isBlob(data)
+    ) {
+      return data;
+    }
+    if (utils.isArrayBufferView(data)) {
+      return data.buffer;
+    }
+    if (utils.isURLSearchParams(data)) {
+      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
+      return data.toString();
+    }
+    if (utils.isObject(data)) {
+      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
+      return JSON.stringify(data);
+    }
+    return data;
+  }],
+
+  transformResponse: [function transformResponse(data) {
+    /*eslint no-param-reassign:0*/
+    if (typeof data === 'string') {
+      try {
+        data = JSON.parse(data);
+      } catch (e) { /* Ignore */ }
+    }
+    return data;
+  }],
+
+  timeout: 0,
+
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
+
+  maxContentLength: -1,
+
+  validateStatus: function validateStatus(status) {
+    return status >= 200 && status < 300;
+  }
+};
+
+defaults.headers = {
+  common: {
+    'Accept': 'application/json, text/plain, */*'
+  }
+};
+
+utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
+  defaults.headers[method] = {};
+});
+
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
+});
+
+module.exports = defaults;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ }),
 /* 4 */
@@ -1078,7 +1078,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(12);
-module.exports = __webpack_require__(51);
+module.exports = __webpack_require__(57);
 
 
 /***/ }),
@@ -1106,10 +1106,11 @@ __webpack_require__(13);
 
 
 
-window.Vue = __webpack_require__(48);
+window.Vue = __webpack_require__(54);
 
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]);
 Vue.use(__WEBPACK_IMPORTED_MODULE_2_vue_axios___default.a, __WEBPACK_IMPORTED_MODULE_1_axios___default.a);
+Vue.component('back-home', __webpack_require__(78));
 
 var router = new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
     mode: 'history',
@@ -18287,7 +18288,7 @@ if (token) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(15)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(15)(module)))
 
 /***/ }),
 /* 15 */
@@ -31081,7 +31082,7 @@ if (typeof jQuery === 'undefined') {
 var utils = __webpack_require__(0);
 var bind = __webpack_require__(5);
 var Axios = __webpack_require__(20);
-var defaults = __webpack_require__(2);
+var defaults = __webpack_require__(3);
 
 /**
  * Create an instance of Axios
@@ -31164,7 +31165,7 @@ function isSlowBuffer (obj) {
 "use strict";
 
 
-var defaults = __webpack_require__(2);
+var defaults = __webpack_require__(3);
 var utils = __webpack_require__(0);
 var InterceptorManager = __webpack_require__(29);
 var dispatchRequest = __webpack_require__(30);
@@ -31696,7 +31697,7 @@ module.exports = InterceptorManager;
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(31);
 var isCancel = __webpack_require__(9);
-var defaults = __webpack_require__(2);
+var defaults = __webpack_require__(3);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -34585,28 +34586,40 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var _typeof="fun
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return routes; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Home_vue__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Home_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_Home_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_people_Peoples_vue__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_people_Peoples_vue__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_people_Peoples_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_people_Peoples_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_people_PeopleDetail_vue__ = __webpack_require__(45);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_people_PeopleDetail_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_people_PeopleDetail_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_vehicle_Vehicles_vue__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_vehicle_Vehicles_vue__ = __webpack_require__(48);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_vehicle_Vehicles_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_vehicle_Vehicles_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_vehicle_VehicleDetail_vue__ = __webpack_require__(65);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_vehicle_VehicleDetail_vue__ = __webpack_require__(51);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_vehicle_VehicleDetail_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_vehicle_VehicleDetail_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_starship_Starships_vue__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_starship_Starships_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_starship_Starships_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_starship_StarshipDetail_vue__ = __webpack_require__(71);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_starship_StarshipDetail_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_starship_StarshipDetail_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_film_Films_vue__ = __webpack_require__(74);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_film_Films_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__components_film_Films_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_film_FilmDetail_vue__ = __webpack_require__(77);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_film_FilmDetail_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__components_film_FilmDetail_vue__);
 
 
 
 
 
 
-var routes = [{ path: '/home', component: __WEBPACK_IMPORTED_MODULE_0__components_Home_vue___default.a, name: 'home' }, { path: '/home/people', component: __WEBPACK_IMPORTED_MODULE_1__components_people_Peoples_vue___default.a, name: 'people' }, { path: '/home/people/detail', component: __WEBPACK_IMPORTED_MODULE_2__components_people_PeopleDetail_vue___default.a, name: 'peopledetail', props: true }, { path: '/home/vehicle', component: __WEBPACK_IMPORTED_MODULE_3__components_vehicle_Vehicles_vue___default.a, name: 'vehicle' }, { path: '/home/vehicle/detail', component: __WEBPACK_IMPORTED_MODULE_4__components_vehicle_VehicleDetail_vue___default.a, name: 'vehicledetail', props: true }];
+
+
+
+
+var routes = [{ path: '/home', component: __WEBPACK_IMPORTED_MODULE_0__components_Home_vue___default.a, name: 'home' }, { path: '/home/people', component: __WEBPACK_IMPORTED_MODULE_1__components_people_Peoples_vue___default.a, name: 'people' }, { path: '/home/people/detail', component: __WEBPACK_IMPORTED_MODULE_2__components_people_PeopleDetail_vue___default.a, name: 'peopledetail', props: true }, { path: '/home/vehicle', component: __WEBPACK_IMPORTED_MODULE_3__components_vehicle_Vehicles_vue___default.a, name: 'vehicle' }, { path: '/home/vehicle/detail', component: __WEBPACK_IMPORTED_MODULE_4__components_vehicle_VehicleDetail_vue___default.a, name: 'vehicledetail', props: true }, { path: '/home/starship', component: __WEBPACK_IMPORTED_MODULE_5__components_starship_Starships_vue___default.a, name: 'starship' }, { path: '/home/starship/detail', component: __WEBPACK_IMPORTED_MODULE_6__components_starship_StarshipDetail_vue___default.a, name: 'starshipdetail', props: true }, { path: '/home/film', component: __WEBPACK_IMPORTED_MODULE_7__components_film_Films_vue___default.a, name: 'film' }, { path: '/home/film/detail', component: __WEBPACK_IMPORTED_MODULE_8__components_film_FilmDetail_vue___default.a, name: 'filmdetail', props: true }];
 
 /***/ }),
 /* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(3)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(40)
 /* template */
@@ -34718,6 +34731,28 @@ var render = function() {
               _c("br"),
               _vm._v(" Vehicles")
             ]
+          ),
+          _vm._v(" "),
+          _c(
+            "router-link",
+            {
+              staticClass: "btn btn-default btn-block text-center",
+              attrs: { to: { name: "starship" } }
+            },
+            [
+              _c("i", { staticClass: "fa fa-fighter-jet" }),
+              _c("br"),
+              _vm._v(" Starships")
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "router-link",
+            {
+              staticClass: "btn btn-default btn-block text-center",
+              attrs: { to: { name: "film" } }
+            },
+            [_c("i", { staticClass: "fa fa-film" }), _c("br"), _vm._v(" Films")]
           )
         ],
         1
@@ -34745,14 +34780,263 @@ if (false) {
 }
 
 /***/ }),
-/* 42 */,
-/* 43 */,
-/* 44 */,
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(43)
+/* template */
+var __vue_template__ = __webpack_require__(44)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\people\\Peoples.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-cbd16224", Component.options)
+  } else {
+    hotAPI.reload("data-v-cbd16224", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 43 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            peoples_count: 0,
+            peoples: [],
+            pagination_next: '',
+            pagination_previous: ''
+        };
+    },
+    mounted: function mounted() {
+        this.getPeoples('');
+    },
+
+    methods: {
+        getPeoples: function getPeoples(url) {
+            var _this = this;
+
+            var sUrl = url != '' ? url : 'https://swapi.co/api/people';
+            this.axios.get(sUrl).then(function (response) {
+                _this.pagination_next = response.data.next;
+                _this.pagination_previous = response.data.previous;
+                _this.peoples_count = response.data.count;
+                _this.peoples = response.data.results;
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "panel panel-default" }, [
+    _c("div", { staticClass: "panel-body" }, [
+      _c("div", { staticClass: "row" }, [
+        _c("h1", [_vm._v("People - " + _vm._s(_vm.peoples_count) + " found")])
+      ]),
+      _vm._v(" "),
+      _c("br"),
+      _c("br"),
+      _vm._v(" "),
+      _vm.peoples.length > 0
+        ? _c("div", { staticClass: "row" }, [
+            _c("table", { staticClass: "table table-stripped" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.peoples, function(people) {
+                  return _c("tr", [
+                    _c("td", [_vm._v(_vm._s(people.name))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(people.birth_year))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(people.gender))]),
+                    _vm._v(" "),
+                    _c(
+                      "td",
+                      [
+                        _c(
+                          "router-link",
+                          {
+                            staticClass: "btn btn-primary",
+                            attrs: {
+                              to: {
+                                name: "peopledetail",
+                                params: { url: people.url }
+                              }
+                            }
+                          },
+                          [_vm._v("Detail")]
+                        )
+                      ],
+                      1
+                    )
+                  ])
+                })
+              )
+            ]),
+            _vm._v(" "),
+            _c("nav", { attrs: { "aria-label": "..." } }, [
+              _c("ul", { staticClass: "pager" }, [
+                _c("li", { staticClass: "previous" }, [
+                  _vm.pagination_previous != null
+                    ? _c(
+                        "a",
+                        {
+                          on: {
+                            click: function($event) {
+                              _vm.getPeoples(_vm.pagination_previous)
+                            }
+                          }
+                        },
+                        [
+                          _c("span", { attrs: { "aria-hidden": "true" } }, [
+                            _vm._v("←")
+                          ]),
+                          _vm._v(" Previous")
+                        ]
+                      )
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("li", { staticClass: "next" }, [
+                  _vm.pagination_next != null
+                    ? _c(
+                        "a",
+                        {
+                          on: {
+                            click: function($event) {
+                              _vm.getPeoples(_vm.pagination_next)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v("Next "),
+                          _c("span", { attrs: { "aria-hidden": "true" } }, [
+                            _vm._v("→")
+                          ])
+                        ]
+                      )
+                    : _vm._e()
+                ])
+              ])
+            ])
+          ])
+        : _c("p", [_vm._v("No data found.")])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Birth Year")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Gender")]),
+        _vm._v(" "),
+        _c("th")
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-cbd16224", module.exports)
+  }
+}
+
+/***/ }),
 /* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(3)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(46)
 /* template */
@@ -35093,8 +35377,8 @@ var render = function() {
                                         staticClass: "btn btn-primary",
                                         attrs: {
                                           to: {
-                                            name: "peopledetail",
-                                            params: { url: _vm.people.url }
+                                            name: "starshipdetail",
+                                            params: { url: starship.url }
                                           }
                                         }
                                       },
@@ -35309,6 +35593,722 @@ if (false) {
 
 /***/ }),
 /* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(49)
+/* template */
+var __vue_template__ = __webpack_require__(50)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\vehicle\\Vehicles.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6889616e", Component.options)
+  } else {
+    hotAPI.reload("data-v-6889616e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 49 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            vehicles_count: 0,
+            vehicles: [],
+            pagination_next: '',
+            pagination_previous: ''
+        };
+    },
+    mounted: function mounted() {
+        this.getVehicles('');
+    },
+
+    methods: {
+        getVehicles: function getVehicles(url) {
+            var _this = this;
+
+            var sUrl = url != '' ? url : 'https://swapi.co/api/vehicles';
+            this.axios.get(sUrl).then(function (response) {
+                _this.pagination_next = response.data.next;
+                _this.pagination_previous = response.data.previous;
+                _this.vehicles_count = response.data.count;
+                _this.vehicles = response.data.results;
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "panel panel-default" }, [
+    _c("div", { staticClass: "panel-body" }, [
+      _c("div", { staticClass: "row" }, [_c("back-home")], 1),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c("h1", [_vm._v("Vehicle - " + _vm._s(_vm.vehicles_count) + " found")])
+      ]),
+      _vm._v(" "),
+      _c("br"),
+      _c("br"),
+      _vm._v(" "),
+      _vm.vehicles.length > 0
+        ? _c("div", { staticClass: "row" }, [
+            _c("table", { staticClass: "table table-stripped" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.vehicles, function(vehicle) {
+                  return _c("tr", [
+                    _c("td", [_vm._v(_vm._s(vehicle.name))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(vehicle.model))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(vehicle.manufacturer))]),
+                    _vm._v(" "),
+                    _c(
+                      "td",
+                      [
+                        _c(
+                          "router-link",
+                          {
+                            staticClass: "btn btn-primary",
+                            attrs: {
+                              to: {
+                                name: "vehicledetail",
+                                params: { url: vehicle.url }
+                              }
+                            }
+                          },
+                          [_vm._v("Detail")]
+                        )
+                      ],
+                      1
+                    )
+                  ])
+                })
+              )
+            ]),
+            _vm._v(" "),
+            _c("nav", { attrs: { "aria-label": "..." } }, [
+              _c("ul", { staticClass: "pager" }, [
+                _c("li", { staticClass: "previous" }, [
+                  _vm.pagination_previous != null
+                    ? _c(
+                        "a",
+                        {
+                          on: {
+                            click: function($event) {
+                              _vm.getVehicles(_vm.pagination_previous)
+                            }
+                          }
+                        },
+                        [
+                          _c("span", { attrs: { "aria-hidden": "true" } }, [
+                            _vm._v("←")
+                          ]),
+                          _vm._v(" Previous")
+                        ]
+                      )
+                    : _vm._e()
+                ]),
+                _vm._v(" "),
+                _c("li", { staticClass: "next" }, [
+                  _vm.pagination_next != null
+                    ? _c(
+                        "a",
+                        {
+                          on: {
+                            click: function($event) {
+                              _vm.getVehicles(_vm.pagination_next)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v("Next "),
+                          _c("span", { attrs: { "aria-hidden": "true" } }, [
+                            _vm._v("→")
+                          ])
+                        ]
+                      )
+                    : _vm._e()
+                ])
+              ])
+            ])
+          ])
+        : _c("p", [_vm._v("No data found.")])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Model")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Manufacturer")]),
+        _vm._v(" "),
+        _c("th")
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-6889616e", module.exports)
+  }
+}
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(52)
+/* template */
+var __vue_template__ = __webpack_require__(53)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\vehicle\\VehicleDetail.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-399526f4", Component.options)
+  } else {
+    hotAPI.reload("data-v-399526f4", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 52 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['url'],
+    data: function data() {
+        return {
+            vehicle: [],
+            peoples: [],
+            films: []
+        };
+    },
+    mounted: function mounted() {
+        if (this.url != null) {
+
+            this.getVehicle(this.url);
+        }
+    },
+
+    methods: {
+        getVehicle: function getVehicle(url) {
+            var _this = this;
+
+            var sUrl = url;
+            this.axios.get(sUrl).then(function (response) {
+                _this.vehicle = response.data;
+                _this.vehicle.films.forEach(function (element) {
+                    _this.getVehicleFilms(element);
+                });
+                _this.vehicle.pilots.forEach(function (element) {
+                    _this.getVehicleFilms(element);
+                });
+            });
+        },
+        getVehicleFilms: function getVehicleFilms(url) {
+            var _this2 = this;
+
+            this.axios.get(url).then(function (response) {
+                _this2.films.push(response.data);
+            });
+        },
+        getVehiclePilots: function getVehiclePilots(url) {
+            var _this3 = this;
+
+            this.axios.get(url).then(function (response) {
+                _this3.peoples.push(response.data);
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "panel" }, [
+    _c("div", { staticClass: "panel-body" }, [
+      _c("ul", { staticClass: "pager" }, [
+        _c(
+          "li",
+          { staticClass: "previous" },
+          [
+            _c("router-link", { attrs: { to: { name: "vehicle" } } }, [
+              _c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("←")]),
+              _vm._v(" Back to vehicles")
+            ])
+          ],
+          1
+        )
+      ]),
+      _vm._v(" "),
+      _vm.url != null
+        ? _c("div", [
+            _c("div", { staticClass: "row text-center" }, [
+              _c("h1", [_vm._v("Details")]),
+              _vm._v(" "),
+              _c("h3", [_vm._v(_vm._s(_vm.vehicle.name))])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "panel with-nav-tabs panel-default" }, [
+                _vm._m(0),
+                _vm._v(" "),
+                _c("div", { staticClass: "panel-body" }, [
+                  _c("div", { staticClass: "tab-content" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "tab-pane fade in active",
+                        attrs: { id: "tab1default" }
+                      },
+                      [
+                        _c("p", [
+                          _c("strong", [_vm._v("Name:")]),
+                          _vm._v(" " + _vm._s(_vm.vehicle.name))
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _c("strong", [_vm._v("Model:")]),
+                          _vm._v(" " + _vm._s(_vm.vehicle.model))
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _c("strong", [_vm._v("Manufacturer:")]),
+                          _vm._v(" " + _vm._s(_vm.vehicle.manufacturer))
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _c("strong", [_vm._v("Crew:")]),
+                          _vm._v(" " + _vm._s(_vm.vehicle.crew))
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _c("strong", [_vm._v("Cargo Capacity:")]),
+                          _vm._v(" " + _vm._s(_vm.vehicle.cargo_capacity))
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _c("strong", [_vm._v("Consumables:")]),
+                          _vm._v(" " + _vm._s(_vm.vehicle.consumables))
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _c("strong", [_vm._v("Lenght")]),
+                          _vm._v(" " + _vm._s(_vm.vehicle.length))
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _c("strong", [_vm._v("Max Atmosphering Speed:")]),
+                          _vm._v(
+                            " " + _vm._s(_vm.vehicle.max_atmosphering_speed)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _c("strong", [_vm._v("Passengers:")]),
+                          _vm._v(" " + _vm._s(_vm.vehicle.passengers))
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _c("strong", [_vm._v("Vehicle Class:")]),
+                          _vm._v(" " + _vm._s(_vm.vehicle.vehicle_class))
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "tab-pane fade",
+                        attrs: { id: "tab4default" }
+                      },
+                      [
+                        _c("table", { staticClass: "table table-stripped" }, [
+                          _vm._m(1),
+                          _vm._v(" "),
+                          _c(
+                            "tbody",
+                            _vm._l(_vm.films, function(film) {
+                              return _c("tr", [
+                                _c("td", [_vm._v(_vm._s(film.title))]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(film.episode_id))]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(film.director))]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(film.release_date))]),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  [
+                                    _c(
+                                      "router-link",
+                                      {
+                                        staticClass: "btn btn-primary",
+                                        attrs: {
+                                          to: {
+                                            name: "vehicledetail",
+                                            params: { url: _vm.vehicle.url }
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Detail")]
+                                    )
+                                  ],
+                                  1
+                                )
+                              ])
+                            })
+                          )
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "tab-pane fade",
+                        attrs: { id: "tab5default" }
+                      },
+                      [
+                        _c("table", { staticClass: "table table-stripped" }, [
+                          _vm._m(2),
+                          _vm._v(" "),
+                          _c(
+                            "tbody",
+                            _vm._l(_vm.peoples, function(people) {
+                              return _c("tr", [
+                                _c("td", [_vm._v(_vm._s(people.name))]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(people.birth_year))]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(people.gender))]),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  [
+                                    _c(
+                                      "router-link",
+                                      {
+                                        staticClass: "btn btn-primary",
+                                        attrs: {
+                                          to: {
+                                            name: "peopledetail",
+                                            params: { url: people.url }
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Detail")]
+                                    )
+                                  ],
+                                  1
+                                )
+                              ])
+                            })
+                          )
+                        ])
+                      ]
+                    )
+                  ])
+                ])
+              ])
+            ])
+          ])
+        : _c("p", [_vm._v("No detail passed")])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "panel-heading" }, [
+      _c("ul", { staticClass: "nav nav-tabs" }, [
+        _c("li", { staticClass: "active" }, [
+          _c("a", { attrs: { href: "#tab1default", "data-toggle": "tab" } }, [
+            _vm._v("Properties")
+          ])
+        ]),
+        _vm._v(" "),
+        _c("li", [
+          _c("a", { attrs: { href: "#tab4default", "data-toggle": "tab" } }, [
+            _vm._v("Films")
+          ])
+        ]),
+        _vm._v(" "),
+        _c("li", [
+          _c("a", { attrs: { href: "#tab5default", "data-toggle": "tab" } }, [
+            _vm._v("Pilots")
+          ])
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Title")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Episode")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Director")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Release Date")]),
+        _vm._v(" "),
+        _c("th")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Birth Year")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Gender")]),
+        _vm._v(" "),
+        _c("th")
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-399526f4", module.exports)
+  }
+}
+
+/***/ }),
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -46122,10 +47122,10 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(49).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(55).setImmediate))
 
 /***/ }),
-/* 49 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var apply = Function.prototype.apply;
@@ -46178,7 +47178,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(50);
+__webpack_require__(56);
 // On some exotic environments, it's not clear which object `setimmeidate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -46189,10 +47189,10 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 50 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -46382,34 +47382,34 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(6)))
 
 /***/ }),
-/* 51 */
+/* 57 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 52 */,
-/* 53 */,
-/* 54 */,
-/* 55 */,
-/* 56 */,
-/* 57 */,
 /* 58 */,
 /* 59 */,
 /* 60 */,
 /* 61 */,
-/* 62 */
+/* 62 */,
+/* 63 */,
+/* 64 */,
+/* 65 */,
+/* 66 */,
+/* 67 */,
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(3)
+var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(63)
+var __vue_script__ = __webpack_require__(69)
 /* template */
-var __vue_template__ = __webpack_require__(64)
+var __vue_template__ = __webpack_require__(70)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -46426,7 +47426,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\people\\Peoples.vue"
+Component.options.__file = "resources\\assets\\js\\components\\starship\\Starships.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -46435,9 +47435,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-cbd16224", Component.options)
+    hotAPI.createRecord("data-v-3ce0dbce", Component.options)
   } else {
-    hotAPI.reload("data-v-cbd16224", Component.options)
+    hotAPI.reload("data-v-3ce0dbce", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -46448,11 +47448,14 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 63 */
+/* 69 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
 //
 //
 //
@@ -46494,33 +47497,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            peoples_count: 0,
-            peoples: [],
+            starships_count: 0,
+            starships: [],
             pagination_next: '',
             pagination_previous: ''
         };
     },
     mounted: function mounted() {
-        this.getPeoples('');
+        this.getStarships('');
     },
 
     methods: {
-        getPeoples: function getPeoples(url) {
+        getStarships: function getStarships(url) {
             var _this = this;
 
-            var sUrl = url != '' ? url : 'https://swapi.co/api/people';
+            var sUrl = url != '' ? url : 'https://swapi.co/api/starships';
             this.axios.get(sUrl).then(function (response) {
                 _this.pagination_next = response.data.next;
                 _this.pagination_previous = response.data.previous;
-                _this.peoples_count = response.data.count;
-                _this.peoples = response.data.results;
+                _this.starships_count = response.data.count;
+                _this.starships = response.data.results;
             });
         }
     }
 });
 
 /***/ }),
-/* 64 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -46529,27 +47532,31 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "panel panel-default" }, [
     _c("div", { staticClass: "panel-body" }, [
+      _c("div", { staticClass: "row" }, [_c("back-home")], 1),
+      _vm._v(" "),
       _c("div", { staticClass: "row" }, [
-        _c("h1", [_vm._v("People - " + _vm._s(_vm.peoples_count) + " found")])
+        _c("h1", [
+          _vm._v("Starship - " + _vm._s(_vm.starships_count) + " found")
+        ])
       ]),
       _vm._v(" "),
       _c("br"),
       _c("br"),
       _vm._v(" "),
-      _vm.peoples.length > 0
+      _vm.starships.length > 0
         ? _c("div", { staticClass: "row" }, [
             _c("table", { staticClass: "table table-stripped" }, [
               _vm._m(0),
               _vm._v(" "),
               _c(
                 "tbody",
-                _vm._l(_vm.peoples, function(people) {
+                _vm._l(_vm.starships, function(starship) {
                   return _c("tr", [
-                    _c("td", [_vm._v(_vm._s(people.name))]),
+                    _c("td", [_vm._v(_vm._s(starship.name))]),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(people.birth_year))]),
+                    _c("td", [_vm._v(_vm._s(starship.model))]),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(people.gender))]),
+                    _c("td", [_vm._v(_vm._s(starship.manufacturer))]),
                     _vm._v(" "),
                     _c(
                       "td",
@@ -46560,8 +47567,8 @@ var render = function() {
                             staticClass: "btn btn-primary",
                             attrs: {
                               to: {
-                                name: "peopledetail",
-                                params: { url: people.url }
+                                name: "starshipdetail",
+                                params: { url: starship.url }
                               }
                             }
                           },
@@ -46584,7 +47591,7 @@ var render = function() {
                         {
                           on: {
                             click: function($event) {
-                              _vm.getPeoples(_vm.pagination_previous)
+                              _vm.getStarships(_vm.pagination_previous)
                             }
                           }
                         },
@@ -46605,7 +47612,7 @@ var render = function() {
                         {
                           on: {
                             click: function($event) {
-                              _vm.getPeoples(_vm.pagination_next)
+                              _vm.getStarships(_vm.pagination_next)
                             }
                           }
                         },
@@ -46634,9 +47641,9 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("Name")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Birth Year")]),
+        _c("th", [_vm._v("Model")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Gender")]),
+        _c("th", [_vm._v("Manufacturer")]),
         _vm._v(" "),
         _c("th")
       ])
@@ -46648,20 +47655,20 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-cbd16224", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-3ce0dbce", module.exports)
   }
 }
 
 /***/ }),
-/* 65 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(3)
+var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(66)
+var __vue_script__ = __webpack_require__(72)
 /* template */
-var __vue_template__ = __webpack_require__(67)
+var __vue_template__ = __webpack_require__(73)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -46678,7 +47685,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\vehicle\\VehicleDetail.vue"
+Component.options.__file = "resources\\assets\\js\\components\\starship\\StarshipDetail.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -46687,9 +47694,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-399526f4", Component.options)
+    hotAPI.createRecord("data-v-004b6e26", Component.options)
   } else {
-    hotAPI.reload("data-v-399526f4", Component.options)
+    hotAPI.reload("data-v-004b6e26", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -46700,11 +47707,32 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 66 */
+/* 72 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -46774,41 +47802,52 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['url'],
     data: function data() {
         return {
-            vehicle: [],
+            starship: [],
+            peoples: [],
             films: []
         };
     },
     mounted: function mounted() {
         if (this.url != null) {
 
-            this.getVehicle(this.url);
+            this.getstarship(this.url);
         }
     },
 
     methods: {
-        getVehicle: function getVehicle(url) {
+        getstarship: function getstarship(url) {
             var _this = this;
 
             var sUrl = url;
             this.axios.get(sUrl).then(function (response) {
-                _this.vehicle = response.data;
-                _this.vehicle.films.forEach(function (element) {
-                    _this.getvehicleFilms(element);
+                _this.starship = response.data;
+                _this.starship.films.forEach(function (element) {
+                    _this.getStarshipFilms(element);
+                });
+                _this.starship.peoples.forEach(function (element) {
+                    _this.getStarshipPilots(element);
                 });
             });
         },
-        getVehicleFilms: function getVehicleFilms(url) {
+        getStarshipFilms: function getStarshipFilms(url) {
             var _this2 = this;
 
             this.axios.get(url).then(function (response) {
                 _this2.films.push(response.data);
+            });
+        },
+        getStarshipPilots: function getStarshipPilots(url) {
+            var _this3 = this;
+
+            this.axios.get(url).then(function (response) {
+                _this3.peoples.push(response.data);
             });
         }
     }
 });
 
 /***/ }),
-/* 67 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -46822,9 +47861,9 @@ var render = function() {
           "li",
           { staticClass: "previous" },
           [
-            _c("router-link", { attrs: { to: { name: "vehicle" } } }, [
+            _c("router-link", { attrs: { to: { name: "starship" } } }, [
               _c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("←")]),
-              _vm._v(" Back to vehicles")
+              _vm._v(" Back to starships")
             ])
           ],
           1
@@ -46836,7 +47875,7 @@ var render = function() {
             _c("div", { staticClass: "row text-center" }, [
               _c("h1", [_vm._v("Details")]),
               _vm._v(" "),
-              _c("h3", [_vm._v(_vm._s(_vm.vehicle.name))])
+              _c("h3", [_vm._v(_vm._s(_vm.starship.name))])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "row" }, [
@@ -46854,54 +47893,54 @@ var render = function() {
                       [
                         _c("p", [
                           _c("strong", [_vm._v("Name:")]),
-                          _vm._v(" " + _vm._s(_vm.vehicle.name))
+                          _vm._v(" " + _vm._s(_vm.starship.name))
                         ]),
                         _vm._v(" "),
                         _c("p", [
                           _c("strong", [_vm._v("Model:")]),
-                          _vm._v(" " + _vm._s(_vm.vehicle.model))
+                          _vm._v(" " + _vm._s(_vm.starship.model))
                         ]),
                         _vm._v(" "),
                         _c("p", [
                           _c("strong", [_vm._v("Manufacturer:")]),
-                          _vm._v(" " + _vm._s(_vm.vehicle.manufacturer))
+                          _vm._v(" " + _vm._s(_vm.starship.manufacturer))
                         ]),
                         _vm._v(" "),
                         _c("p", [
                           _c("strong", [_vm._v("Crew:")]),
-                          _vm._v(" " + _vm._s(_vm.vehicle.crew))
+                          _vm._v(" " + _vm._s(_vm.starship.crew))
                         ]),
                         _vm._v(" "),
                         _c("p", [
                           _c("strong", [_vm._v("Cargo Capacity:")]),
-                          _vm._v(" " + _vm._s(_vm.vehicle.cargo_capacity))
+                          _vm._v(" " + _vm._s(_vm.starship.cargo_capacity))
                         ]),
                         _vm._v(" "),
                         _c("p", [
                           _c("strong", [_vm._v("Consumables:")]),
-                          _vm._v(" " + _vm._s(_vm.vehicle.consumables))
+                          _vm._v(" " + _vm._s(_vm.starship.consumables))
                         ]),
                         _vm._v(" "),
                         _c("p", [
                           _c("strong", [_vm._v("Lenght")]),
-                          _vm._v(" " + _vm._s(_vm.vehicle.length))
+                          _vm._v(" " + _vm._s(_vm.starship.length))
                         ]),
                         _vm._v(" "),
                         _c("p", [
                           _c("strong", [_vm._v("Max Atmosphering Speed:")]),
                           _vm._v(
-                            " " + _vm._s(_vm.vehicle.max_atmosphering_speed)
+                            " " + _vm._s(_vm.starship.max_atmosphering_speed)
                           )
                         ]),
                         _vm._v(" "),
                         _c("p", [
                           _c("strong", [_vm._v("Passengers:")]),
-                          _vm._v(" " + _vm._s(_vm.vehicle.passengers))
+                          _vm._v(" " + _vm._s(_vm.starship.passengers))
                         ]),
                         _vm._v(" "),
                         _c("p", [
-                          _c("strong", [_vm._v("Vehicle Class:")]),
-                          _vm._v(" " + _vm._s(_vm.vehicle.vehicle_class))
+                          _c("strong", [_vm._v("Starship Class:")]),
+                          _vm._v(" " + _vm._s(_vm.starship.starship_class))
                         ])
                       ]
                     ),
@@ -46937,8 +47976,54 @@ var render = function() {
                                         staticClass: "btn btn-primary",
                                         attrs: {
                                           to: {
-                                            name: "vehicledetail",
-                                            params: { url: _vm.vehicle.url }
+                                            name: "starshipdetail",
+                                            params: { url: _vm.starship.url }
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Detail")]
+                                    )
+                                  ],
+                                  1
+                                )
+                              ])
+                            })
+                          )
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "tab-pane fade",
+                        attrs: { id: "tab5default" }
+                      },
+                      [
+                        _c("table", { staticClass: "table table-stripped" }, [
+                          _vm._m(2),
+                          _vm._v(" "),
+                          _c(
+                            "tbody",
+                            _vm._l(_vm.peoples, function(people) {
+                              return _c("tr", [
+                                _c("td", [_vm._v(_vm._s(people.name))]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(people.birth_year))]),
+                                _vm._v(" "),
+                                _c("td", [_vm._v(_vm._s(people.gender))]),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  [
+                                    _c(
+                                      "router-link",
+                                      {
+                                        staticClass: "btn btn-primary",
+                                        attrs: {
+                                          to: {
+                                            name: "peopledetail",
+                                            params: { url: people.url }
                                           }
                                         }
                                       },
@@ -46979,6 +48064,12 @@ var staticRenderFns = [
           _c("a", { attrs: { href: "#tab4default", "data-toggle": "tab" } }, [
             _vm._v("Films")
           ])
+        ]),
+        _vm._v(" "),
+        _c("li", [
+          _c("a", { attrs: { href: "#tab5default", "data-toggle": "tab" } }, [
+            _vm._v("Pilots")
+          ])
         ])
       ])
     ])
@@ -47000,6 +48091,22 @@ var staticRenderFns = [
         _c("th")
       ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Birth Year")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Gender")]),
+        _vm._v(" "),
+        _c("th")
+      ])
+    ])
   }
 ]
 render._withStripped = true
@@ -47007,20 +48114,20 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-399526f4", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-004b6e26", module.exports)
   }
 }
 
 /***/ }),
-/* 68 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(3)
+var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(69)
+var __vue_script__ = __webpack_require__(75)
 /* template */
-var __vue_template__ = __webpack_require__(70)
+var __vue_template__ = __webpack_require__(76)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -47037,7 +48144,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\vehicle\\Vehicles.vue"
+Component.options.__file = "resources\\assets\\js\\components\\film\\Films.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -47046,9 +48153,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-6889616e", Component.options)
+    hotAPI.createRecord("data-v-6055f20e", Component.options)
   } else {
-    hotAPI.reload("data-v-6889616e", Component.options)
+    hotAPI.reload("data-v-6055f20e", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -47059,7 +48166,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 69 */
+/* 75 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -47101,37 +48208,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            vehicles_count: 0,
-            vehicles: [],
+            films_count: 0,
+            films: [],
             pagination_next: '',
             pagination_previous: ''
         };
     },
     mounted: function mounted() {
-        this.getVehicles('');
+        this.getFilms('');
     },
 
     methods: {
-        getVehicles: function getVehicles(url) {
+        getFilms: function getFilms(url) {
             var _this = this;
 
-            var sUrl = url != '' ? url : 'https://swapi.co/api/vehicles';
+            var sUrl = url != '' ? url : 'https://swapi.co/api/films';
             this.axios.get(sUrl).then(function (response) {
                 _this.pagination_next = response.data.next;
                 _this.pagination_previous = response.data.previous;
-                _this.vehicles_count = response.data.count;
-                _this.vehicles = response.data.results;
+                _this.films_count = response.data.count;
+                _this.films = response.data.results;
             });
         }
     }
 });
 
 /***/ }),
-/* 70 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -47140,27 +48252,31 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "panel panel-default" }, [
     _c("div", { staticClass: "panel-body" }, [
+      _c("div", { staticClass: "row" }, [_c("back-home")], 1),
+      _vm._v(" "),
       _c("div", { staticClass: "row" }, [
-        _c("h1", [_vm._v("Vehicle - " + _vm._s(_vm.vehicles_count) + " found")])
+        _c("h1", [_vm._v("Films - " + _vm._s(_vm.films_count) + " found")])
       ]),
       _vm._v(" "),
       _c("br"),
       _c("br"),
       _vm._v(" "),
-      _vm.vehicles.length > 0
+      _vm.films.length > 0
         ? _c("div", { staticClass: "row" }, [
             _c("table", { staticClass: "table table-stripped" }, [
               _vm._m(0),
               _vm._v(" "),
               _c(
                 "tbody",
-                _vm._l(_vm.vehicles, function(vehicle) {
+                _vm._l(_vm.films, function(film) {
                   return _c("tr", [
-                    _c("td", [_vm._v(_vm._s(vehicle.name))]),
+                    _c("td", [_vm._v(_vm._s(film.title))]),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(vehicle.model))]),
+                    _c("td", [_vm._v(_vm._s(film.episode_id))]),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(vehicle.manufacturer))]),
+                    _c("td", [_vm._v(_vm._s(film.director))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(film.release_date))]),
                     _vm._v(" "),
                     _c(
                       "td",
@@ -47171,8 +48287,8 @@ var render = function() {
                             staticClass: "btn btn-primary",
                             attrs: {
                               to: {
-                                name: "vehicledetail",
-                                params: { url: vehicle.url }
+                                name: "filmdetail",
+                                params: { url: film.url }
                               }
                             }
                           },
@@ -47195,7 +48311,7 @@ var render = function() {
                         {
                           on: {
                             click: function($event) {
-                              _vm.getVehicles(_vm.pagination_previous)
+                              _vm.getFilms(_vm.pagination_previous)
                             }
                           }
                         },
@@ -47216,7 +48332,7 @@ var render = function() {
                         {
                           on: {
                             click: function($event) {
-                              _vm.getVehicles(_vm.pagination_next)
+                              _vm.getFilms(_vm.pagination_next)
                             }
                           }
                         },
@@ -47243,11 +48359,13 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", [_vm._v("Name")]),
+        _c("th", [_vm._v("Title")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Model")]),
+        _c("th", [_vm._v("Episode")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Manufacturer")]),
+        _c("th", [_vm._v("Director")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Release Date")]),
         _vm._v(" "),
         _c("th")
       ])
@@ -47259,7 +48377,130 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-6889616e", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-6055f20e", module.exports)
+  }
+}
+
+/***/ }),
+/* 77 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = null
+/* template */
+var __vue_template__ = null
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\film\\FilmDetail.vue"
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(79)
+/* template */
+var __vue_template__ = __webpack_require__(80)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\utils\\BackBottom.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3ec8081c", Component.options)
+  } else {
+    hotAPI.reload("data-v-3ec8081c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 79 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({});
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("ul", { staticClass: "pager" }, [
+    _c(
+      "li",
+      { staticClass: "previous" },
+      [
+        _c("router-link", { attrs: { to: { name: "home" } } }, [
+          _c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("←")]),
+          _vm._v(" Back to Home")
+        ])
+      ],
+      1
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3ec8081c", module.exports)
   }
 }
 

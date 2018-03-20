@@ -47,7 +47,7 @@
                                                 <td>{{ starship.name }}</td>
                                                 <td>{{ starship.model }}</td>
                                                 <td>{{ starship.manufacturer }}</td>
-                                                <td><router-link :to="{name: 'peopledetail', params: { url: people.url } }" class="btn btn-primary">Detail</router-link></td>
+                                                <td><router-link :to="{name: 'starshipdetail', params: { url: starship.url } }" class="btn btn-primary">Detail</router-link></td>
                                             </tr>
                                         </tbody>                    
                                     </table>

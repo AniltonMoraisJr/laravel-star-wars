@@ -15,6 +15,7 @@ window.Vue = require('vue');
 
 Vue.use(VueRouter);
 Vue.use(VueAxios, axios);
+Vue.component('back-home', require('./utils/BackBottom.vue'));
 
 const router = new VueRouter({
     mode: 'history',
